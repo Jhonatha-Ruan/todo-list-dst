@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const App = () => {
   const [bosses, setBosses] = useState([]);
   const [checkedBosses, setCheckedBosses] = useState({});
-  const [isLoading, setIsLoading] = useState(true); // Estado para o carregamento
+  const [isLoading, setIsLoading] = useState(true);
 
   // Carregar estado inicial do Local Storage ou inicializar com valores padrão
   useEffect(() => {
@@ -17,27 +17,24 @@ const App = () => {
       .then((data) => {
         setBosses(data.bosses);
 
-        // Tentar carregar o estado salvo do Local Storage
         const savedCheckedState = JSON.parse(
           localStorage.getItem("checkedBosses")
         );
 
         if (savedCheckedState) {
-          // Se houver dados salvos, usar esses dados
           setCheckedBosses(savedCheckedState);
         } else {
-          // Caso contrário, inicializar com todos como "não marcados"
           const initialCheckedState = data.bosses.reduce((state, boss) => {
             state[boss] = false;
             return state;
           }, {});
           setCheckedBosses(initialCheckedState);
         }
-        setIsLoading(false); // Finaliza o carregamento
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
-        setIsLoading(false); // Finaliza o carregamento mesmo com erro
+        setIsLoading(false);
       });
   }, []);
 
@@ -46,10 +43,9 @@ const App = () => {
     setCheckedBosses((prevState) => {
       const newState = {
         ...prevState,
-        [boss]: !prevState[boss], // Inverte o estado do boss atual
+        [boss]: !prevState[boss],
       };
 
-      // Salvar o estado atualizado no Local Storage
       localStorage.setItem("checkedBosses", JSON.stringify(newState));
 
       return newState;
@@ -58,8 +54,8 @@ const App = () => {
 
   // Função para obter o caminho da imagem na pasta `public/assets/imgs`
   const getBossImage = (boss) => {
-    const sanitizedBossName = boss.replace(/\//g, ""); // Remove as barras "/"
-    return `/imgs/${sanitizedBossName}.png`; // Caminho relativo à pasta public
+    const sanitizedBossName = boss.replace(/\//g, "");
+    return `assets/imgs/${sanitizedBossName}.png`;
   };
 
   return (
